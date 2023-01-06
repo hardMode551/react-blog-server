@@ -14,7 +14,7 @@ import { checkAuth, handleValidationErrors } from './utils/index.js';
 import { UserController, PostController } from './controllers/index.js';
 
 mongoose
-  .connect(process.env.MONGODB_URI)
+  .connect(`${process.env.MONGODB_URI}`)
   .then(() => console.log('DB ok'))
   .catch((err) => console.log('DB err', err));
 
@@ -36,7 +36,7 @@ const upload = multer({ storage });
 
 app.use(express.json());
 app.use(cors());
-app.use('/uploads', express.static('uploads'));
+app.use('uploads', express.static('uploads'));
 
 app.get('/', (req, res) => {
   res.send('HI DEVELOPER');
@@ -56,7 +56,7 @@ app.get('/posts/:id', PostController.getOne);
 
 app.post('/upload', checkAuth, upload.single('image'), (req, res) => {
   res.json({
-    url: `/uploads/${req.file.originalname}`,
+    url: `uploads/${req.file.originalname}`,
   });
 });
 
